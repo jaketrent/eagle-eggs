@@ -1,5 +1,6 @@
 <html>
   <head>
+    <link rel="stylesheet" href="https://cloud.typography.com/6966154/691568/css/fonts.css">
     <style>
       // TODO: rm clock
       .psh__clock {
@@ -169,6 +170,9 @@
         border: 3px solid #F05A28;
         z-index: 530;
       }
+      .psh__hitzone--hidden {
+        display: none;
+      }
       .psh__hitzone--hit {
         background-color: rgba(190, 254, 197, 0.7);
         border-color: #23B45D;
@@ -191,7 +195,7 @@
         text-align: center;
         line-height: 28px;
         border-radius: 50%;
-        font-family: sans-serif;
+        font-family: 'Gotham SSm A', 'Gotham SSm B', sans-serif;
         font-size: 12px;
         font-weight: bolder;
         display: inline-block;
@@ -226,7 +230,7 @@
         background-color: #F05A28;
         color: #fff;
         padding: 5px 0;
-        font-family: sans-serif;
+        font-family: 'Gotham SSm A', 'Gotham SSm B', sans-serif;
         font-weight: lighter;
         text-transform: uppercase;
         font-size: 12px;
@@ -238,7 +242,7 @@
       .psh__score__num {
         display: inline-block;
         font-size: 30px;
-        font-family: sans-serif;
+        font-family: 'Gotham SSm A', 'Gotham SSm B', sans-serif;
         font-weight: lighter;
       }
       .psh__score__actual {
@@ -247,7 +251,29 @@
       .psh__score__out-of {
         color: #ababab;
       }
-
+      .psh__modal {
+        position: absolute;
+        left: 0;
+        bottom: 70px;
+        height: 274px;
+        width: 365px;
+        overflow: hidden;
+        background-color: rgba(255, 255, 255, .9);
+        border-radius: 5px;
+        border: 3px solid #F05A28;
+        padding: 24px;
+        z-index: 530;
+      }
+      .psh__modal--hidden {
+        display: none;
+      }
+      .psh__modal__copy {
+        font-family: 'Gotham SSm A', 'Gotham SSm B', sans-serif;
+        font-size: 14px;
+        line-height: 1.2em;
+        font-weight: 400;
+        text-align: center;
+      }
     </style>
   </head>
   <body>
@@ -279,18 +305,10 @@
             <div class="psh__string"></div>
           </div>
           <div class="psh__lanes">
-            <div class="psh__lane psh__lane--1">
-              <!-- <div class="psh__token"></div> -->
-            </div>
-            <div class="psh__lane psh__lane--2">
-              <!-- <div class="psh__token"></div> -->
-            </div>
-            <div class="psh__lane psh__lane--3">
-              <!-- <div class="psh__token"></div> -->
-            </div>
-            <div class="psh__lane psh__lane--4">
-              <!-- <div class="psh__token"></div> -->
-            </div>
+            <div class="psh__lane psh__lane--1"></div>
+            <div class="psh__lane psh__lane--2"></div>
+            <div class="psh__lane psh__lane--3"></div>
+            <div class="psh__lane psh__lane--4"></div>
           </div>
         </div>
         <div class="psh__hitzone">
@@ -307,6 +325,10 @@
               <div class="psh__score__num psh__score__out-of">/??</div>
             </div>
           </div>
+        </div>
+        <div class="psh__modal psh__modal--hidden">
+          <div class="psh__modal__copy">You're about to get a backstage pass to Pluralsight. We're inviting an exclusive group of VIPs to participate in the development of new products and get an advanced look at new user experiences.</div>
+
         </div>
       </div>
     </div>
@@ -375,16 +397,12 @@
         }
 
         function isInLane(targetLane, lane) {
-          // console.log("targetLane, lane", targetLane, lane, targetLane === lane)
           return targetLane === lane
         }
 
         function isInTime(targetTime, time) {
-          var allowance = 500
-          var retval = time <= targetTime + allowance
-                  && time >= targetTime - allowance
-          // console.log('low <= time <= hi', (targetTime - allowance), time, (targetTime + allowance), retval)
-          return retval
+          return time <= targetTime + HIT_ALLOWANCE
+              && time >= targetTime - HIT_ALLOWANCE
         }
 
         function isHit(song, lane, time) {
@@ -394,7 +412,6 @@
         }
 
         function setScore(actual, outOf) {
-          console.log("actual", actual)
           document.querySelector('.psh__score__actual').innerHTML = actual
           document.querySelector('.psh__score__out-of').innerHTML = '/' + outOf
         }
@@ -402,8 +419,7 @@
         function detectHit(getTime, evt) {
           var key = evt.which
           if (isActionKey(KEYS, key)) {
-            var hit = isHit(song, getLane(KEYS, key), getTime())
-            if (hit) {
+            if (isHit(song, getLane(KEYS, key), getTime())) {
               setScore(score++, song.length)
               addClass(hitzone, 'psh__hitzone--hit')
               setTimeout(function () { removeClass(hitzone, 'psh__hitzone--hit') }, 400)
@@ -432,16 +448,17 @@
         function dropNotes(getTime, evt) {
           song.forEach(function (note) {
             if (isTimeToDrop(getTime(), note.time)) {
-              console.log('drop time!', note.lane, note.time)
               dropNote(note)
             }
           })
         }
 
         function endGame() {
-          console.log("score", score, song.length)
+          removeClass(modal, 'psh__modal--hidden')
+          addClass(hitzone, 'psh__hitzone--hidden')
         }
 
+        var HIT_ALLOWANCE = 300
         var TIME_TO_HITZONE = 1000
         var TIME_TO_DISAPPEAR = 1500
         var SONG_TIME = 25000
@@ -483,6 +500,7 @@
         var clock = document.querySelector('.psh__clock')
         var sound = document.querySelector('.psh__sound')
         var hitzone = document.querySelector('.psh__hitzone')
+        var modal = document.querySelector('.psh__modal')
 
         loadSound(sound, SOUND_FILE_PATH)
 
