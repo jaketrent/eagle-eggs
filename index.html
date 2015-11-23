@@ -16,12 +16,12 @@
           transform: translateY(-100px);
         }
         100% {
-          transform: translateY(700px);
+          transform: translateY(500px);
         }
       }
       .psh__falling {
         animation-name: psh__falling;
-        animation-duration: 2s;
+        animation-duration: 1400ms;
         animation-timing-function: linear;
         animation-delay: 0ms;
         animation-iteration-count: 1;
@@ -122,15 +122,28 @@
         display: inline-block;
         height: 475px;
         width: 50px;
-        padding: 0 8px 0 9px;
         vertical-align: top;
         overflow: hidden;
       }
-      ,psh__token {
+      .psh__token {
         height: 33px;
         width: 33px;
         border-radius: 50%;
         z-index: 540;
+
+        /*transform: translateY(392px);*/
+      }
+      .psh__lane--1 {
+        padding-left: 11px;
+      }
+      .psh__lane--2 {
+        padding-left: 8px;
+      }
+      .psh__lane--3 {
+        padding-left: 8px;
+      }
+      .psh__lane--4 {
+        padding-left: 6px;
       }
       .psh__lane--1 .psh__token {
         background-color: #23B45D;
@@ -152,15 +165,15 @@
         width: 300px;
         background-color: rgba(255, 255, 255, .7);
         border-radius: 5px;
-        border: 2px solid #F05A28;
+        border: 3px solid #F05A28;
         z-index: 530;
       }
       .psh__hitzone--hit {
-        background: rgba(190, 254, 197, 0.7)
+        background-color: rgba(190, 254, 197, 0.7);
         border-color: #23B45D;
       }
       .psh__hitzone--miss {
-        background-color: rgba(241, 196, 196, 0.7)
+        background-color: rgba(241, 196, 196, 0.7);
         border-color: #DC1F26;
       }
       .psh__hitkeys {
@@ -228,10 +241,18 @@
             <div class="psh__string"></div>
           </div>
           <div class="psh__lanes">
-            <div class="psh__lane psh__lane--1"></div>
-            <div class="psh__lane psh__lane--2"></div>
-            <div class="psh__lane psh__lane--3"></div>
-            <div class="psh__lane psh__lane--4"></div>
+            <div class="psh__lane psh__lane--1">
+              <!-- <div class="psh__token"></div> -->
+            </div>
+            <div class="psh__lane psh__lane--2">
+              <!-- <div class="psh__token"></div> -->
+            </div>
+            <div class="psh__lane psh__lane--3">
+              <!-- <div class="psh__token"></div> -->
+            </div>
+            <div class="psh__lane psh__lane--4">
+              <!-- <div class="psh__token"></div> -->
+            </div>
           </div>
         </div>
         <div class="psh__hitzone">
@@ -331,16 +352,16 @@
           var key = evt.which
           if (isActionKey(KEYS, key)) {
             var hit = isHit(song, getLane(KEYS, key), getTime())
-            console.log("hit", hit)
             // TODO: keep score
 
             if (hit) {
               score++
+              console.log("hit", hitzone)
               addClass(hitzone, 'psh__hitzone--hit')
-              setTimeout(function () { removeClass(hitzone, 'hit') }, 400)
+              setTimeout(function () { removeClass(hitzone, 'psh__hitzone--hit') }, 400)
             } else {
               addClass(hitzone, 'psh__hitzone--miss')
-              setTimeout(function () { removeClass(hitzone, 'miss') }, 400)
+              setTimeout(function () { removeClass(hitzone, 'psh__hitzone--miss') }, 400)
             }
           }
         }
@@ -371,12 +392,10 @@
 
         function endGame() {
           console.log("score", score, song.length)
-
-
         }
 
         var TIME_TO_HITZONE = 1000
-        var TIME_TO_DISAPPEAR = 2000
+        var TIME_TO_DISAPPEAR = 1500
         var SONG_TIME = 25000
         var SOUND_FILE_PATH = 'song'
         var KEYS = {
