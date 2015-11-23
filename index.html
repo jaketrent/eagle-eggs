@@ -106,11 +106,127 @@
         width: 50px;
         border: 1px solid #ababab;
       }
+
+
+      .psh__frame {
+        position: fixed;
+        bottom: 0;
+        right: 300px;
+        z-index: 510;
+      }
+
+      .psh__guitar {
+
+      }
+      .psh__head {
+        position: relative;
+        width: 368px;
+        z-index: 530;
+      }
+      .psh__head-hand {
+        margin: 0 auto;
+        height: 368px;
+        width: 251px;
+        background: url(hand.png) no-repeat center;
+      }
+      .psh__peg {
+        position: absolute;
+        height: 42px;
+        width: 43px;
+        background: url(peg.png) no-repeat center;
+      }
+      .psh__peg--nw {
+        top: 125px;
+        left: 0;
+      }
+      .psh__peg--sw {
+        top: 205px;
+        left: 0;
+      }
+      .psh__peg--ne {
+        top: 125px;
+        right: 0;
+        transform: scaleX(-1);
+      }
+      .psh__peg--se {
+        top: 205px;
+        right: 0;
+        transform: scaleX(-1);
+      }
+      .psh__neck {
+        position: relative;
+        overflow: hidden;
+        width: 200px;
+        height: 475px;
+        margin: -100px auto 0 auto;
+        background-color: #222222;
+        z-index: 520;
+      }
+      .psh__frets {
+        position: absolute;
+        width: 100%;
+      }
+      .psh__fret {
+        width: 100%;
+        margin-bottom: 87px;
+        background-color: #EBEBEB;
+        border-top: 2px solid #827E7D;
+        border-bottom: 2px solid #827E7D;
+      }
+      .psh__strings {
+        position: absolute;
+        width: 100%;
+        padding: 0 25px;
+        font-size: 0;
+      }
+      .psh__string {
+        display: inline-block;
+        width: 5px;
+        height: 475px;
+        margin-right: 43px;
+        background-color: #8E8C8C;
+        border-left: 2px solid #9F9F9E;
+        border-right: 2px solid #9F9F9E;
+      }
+      .psh__string:last-child {
+        margin-right: 0;
+      }
     </style>
   </head>
   <body>
     <div class="sound"></div>
     <div class="clock"></div>
+
+    <div class="psh__frame">
+      <div class="psh__guitar">
+        <div class="psh__head">
+          <div class="psh__head-hand"></div>
+          <div class="psh__peg psh__peg--nw"></div>
+          <div class="psh__peg psh__peg--sw"></div>
+          <div class="psh__peg psh__peg--ne"></div>
+          <div class="psh__peg psh__peg--se"></div>
+        </div>
+        <div class="psh__neck">
+          <div class="psh__frets">
+            <div class="psh__fret"></div>
+            <div class="psh__fret"></div>
+            <div class="psh__fret"></div>
+            <div class="psh__fret"></div>
+            <div class="psh__fret"></div>
+            <div class="psh__fret"></div>
+          </div>
+          <div class="psh__strings">
+            <div class="psh__string"></div>
+            <div class="psh__string"></div>
+            <div class="psh__string"></div>
+            <div class="psh__string"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
     <div class="lanes">
       <div class="lane lane1"></div>
       <div class="lane lane2"></div>
@@ -248,7 +364,7 @@
         function endGame() {
           console.log("score", score, song.length)
 
-          
+
         }
 
         var TIME_TO_HITZONE = 1000
@@ -309,7 +425,7 @@
       }
     }
 
-    psHero.start()
+    // psHero.start()
 
   </script>
 </html>
