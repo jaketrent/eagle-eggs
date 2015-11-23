@@ -1,6 +1,30 @@
 <html>
   <head>
     <style>
+      @keyframes moving {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(100vw);
+        }
+      }
+      @keyframes cuttingTop {
+        0% {
+          transform: rotate(-5deg);
+        }
+        80% {
+          transform: rotate(-20deg);
+        }
+      }
+      @keyframes cuttingBottom {
+        0% {
+          transform: rotate(5deg);
+        }
+        80% {
+          transform: rotate(20deg);
+        }
+      }
       body {
         margin: 0;
         padding: 0;
@@ -9,11 +33,18 @@
         min-height: 400px;
         background-color: lightblue;
       }
+      #egg {
+        border-top: 2px dashed blue;
+      }
       .scissors {
         position: relative;
-        top: 0;
-        left: 100px;
+        top: -5px;
+        left: 20px;
         display: inline-block;
+        transform: rotate(-2deg);
+      }
+      .scissors.moving {
+        animation: moving 5s ease-in 0s 1 normal forwards;
       }
       .arm {
         position: absolute;
@@ -24,10 +55,16 @@
         transform-origin: 35px 5px;
       }
       .arm.top {
-        transform: rotate(-20deg);
+        transform: rotate(-5deg);
       }
       .arm.bottom {
-        transform: rotate(20deg);
+        transform: rotate(5deg);
+      }
+      .scissors.cutting .arm.top {
+        animation: cuttingTop 800ms ease-in 0s 6;
+      }
+      .scissors.cutting .arm.bottom {
+        animation: cuttingBottom 800ms ease-in 0s 6;
       }
       .blade {
         position: absolute;
@@ -82,13 +119,12 @@
         border-radius: 50%;
         background-color: #85b873;
       }
-      
     </style>
   </head>
   <body>
     <div id="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente omnis obcaecati nostrum alias, reprehenderit quam fugiat sit cum ullam mollitia incidunt quod sint dicta voluptatem numquam, at cumque ut et!</div>
     <div id="egg">
-      <div class="scissors">
+      <div class="scissors cutting moving">
         <div class="arm top">
           <div class="handle"></div>
           <div class="blade"></div>
