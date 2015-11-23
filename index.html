@@ -12,7 +12,20 @@
       .scissors {
         position: relative;
         display: inline-block;
-        outline: 1px solid red;
+      }
+      .arm {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 10px;
+        width: 50px;
+        transform-origin: 0 5px;
+      }
+      .arm.top {
+        transform: rotate(-20deg);
+      }
+      .arm.bottom {
+        transform: rotate(20deg);
       }
       .blade {
         position: absolute;
@@ -20,15 +33,12 @@
         left: 0;
         height: 10px;
         width: 50px;
-        transform-origin: 0 5px;
         border-radius: 25% 0 0 25%;
       }
-      .blade.top {
-        transform: rotate(-20deg);
+      .arm.top .blade {
         background-color: lightgreen;
       }
-      .blade.bottom {
-        transform: rotate(20deg);
+      .arm.bottom .blade {
         background-color: green;
       }
       .point {
@@ -38,11 +48,11 @@
         height: 0;
         width: 0;
       }
-      .blade.top .point {
+      .arm.top .point {
         border-top: 10px solid transparent;
         border-left: 15px solid lightgreen;
       }
-      .blade.bottom .point {
+      .arm.bottom .point {
         border-top: 10px solid green;
         border-right: 15px solid transparent;
       }
@@ -52,10 +62,14 @@
     <div id="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente omnis obcaecati nostrum alias, reprehenderit quam fugiat sit cum ullam mollitia incidunt quod sint dicta voluptatem numquam, at cumque ut et!</div>
     <div id="egg">
       <div class="scissors">
-        <div class="blade top">
+        <div class="arm top">
+          <div class="handle"></div>
+          <div class="blade"></div>
           <div class="point"></div>
         </div>
-        <div class="blade bottom">
+        <div class="arm bottom">
+          <div class="handle"></div>
+          <div class="blade"></div>
           <div class="point"></div>
         </div>
 
