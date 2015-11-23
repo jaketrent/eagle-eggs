@@ -99,6 +99,7 @@
     </style>
   </head>
   <body>
+    <div class="sound"></div>
     <div class="clock"></div>
     <div class="lanes">
       <div class="lane lane1">
@@ -123,6 +124,13 @@
 
     window.psHero = {
       start: function start() {
+        function loadSound(sound, filePath, done) {
+          sound.innerHTML = '<audio class="audio">' +
+              '<source src="' + filePath + '.mp3" type="audio/mpeg" />' +
+              '<source src="' + filePath + '.ogg" type="audio/ogg" />' +
+            '</audio>'
+        }
+
         function createTimer() {
           var startTime = Date.now()
           return function timer() {
@@ -148,21 +156,35 @@
           return KEYS[key]
         }
 
-        function isInLane(targetLane, key) {
-          return targetLane === getLane(key)
+        function isInLane(targetLane, lane) {
+          // console.log("targetLane, lane", targetLane, lane, targetLane === lane)
+          return targetLane === lane
         }
 
         function isInTime(targetTime, time) {
           var allowance = 500
-          return time < targetTime + allowance
-              && time > targetTime - allowance
+          var retval = time <= targetTime + allowance
+                  && time >= targetTime - allowance
+          // console.log('low <= time <= hi', (targetTime - allowance), time, (targetTime + allowance), retval)
+          return retval
         }
 
         function isHit(song, lane, time) {
           return song.filter(function (note) {
-            return isInLane(lane, note.lane) && isInTime(time, note.time)
+            return isInTime(time, note.time) && isInLane(lane, note.lane)
           }).length > 0
         }
+
+        function detectHit(getTime, evt) {
+          var key = evt.which
+          if (isActionKey(KEYS, key)) {
+            var hit = isHit(song, getLane(KEYS, key), getTime())
+            console.log("hit", hit)
+            // TODO: keep score
+          }
+        }
+
+        var soundFilePath = 'song'
 
         var song = [
           { lane: 1, time: 4000 },
@@ -177,19 +199,20 @@
           68: 3, // D
           70: 4  // F
         }
-
-        var getTime = createTimer()
-
         var clock = document.querySelector('.clock')
-        document.addEventListener('keydown', function detectHit(evt) {
-          var key = evt.which
-          if (isActionKey(KEYS, key)) {
-            var hit = isHit(song, getLane(KEYS, key), getTime())
-            console.log("hit", hit)
-          }
-        })
+        var audio = document.querySelector('.audio')
+        var sound = document.querySelector('.sound')
 
-        setInterval(showTiming.bind(this, clock, getTime), 500)
+        loadSound(sound, soundFilePath)
+
+        var audio = document.querySelector('.audio')
+        audio.addEventListener('canplaythrough', function () {
+          var getTime = createTimer()
+          document.addEventListener('keydown', detectHit.bind(this, getTime))
+          audio.play()
+          // TODO: animate falling tokens
+          setInterval(showTiming.bind(this, clock, getTime), 500)
+        })
       },
       end: function end() {
         // TODO: handle cleanup; call after game over
