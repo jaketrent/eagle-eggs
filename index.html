@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #content {
+        min-height: 400px;
+        background-color: lightblue;
+      }
+      .scissors {
+        position: relative;
+        display: inline-block;
+        outline: 1px solid red;
+      }
+      .blade {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 10px;
+        width: 50px;
+        transform-origin: 0 5px;
+        border-radius: 25% 0 0 25%;
+      }
+      .blade.top {
+        transform: rotate(-20deg);
+        background-color: lightgreen;
+      }
+      .blade.bottom {
+        transform: rotate(20deg);
+        background-color: green;
+      }
+      .point {
+        position: absolute;
+        top: 0;
+        right: -15px;
+        height: 0;
+        width: 0;
+      }
+      .blade.top .point {
+        border-top: 10px solid transparent;
+        border-left: 15px solid lightgreen;
+      }
+      .blade.bottom .point {
+        border-top: 10px solid green;
+        border-right: 15px solid transparent;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente omnis obcaecati nostrum alias, reprehenderit quam fugiat sit cum ullam mollitia incidunt quod sint dicta voluptatem numquam, at cumque ut et!</div>
+    <div id="egg">
+      <div class="scissors">
+        <div class="blade top">
+          <div class="point"></div>
+        </div>
+        <div class="blade bottom">
+          <div class="point"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </body>
+
+</html>
