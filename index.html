@@ -211,6 +211,7 @@
             // TODO: keep score
 
             if (hit) {
+              score++
               addClass(hitzone, 'hit')
               setTimeout(function () { removeClass(hitzone, 'hit') }, 400)
             } else {
@@ -244,59 +245,56 @@
           })
         }
 
+        function endGame() {
+          console.log("score", score, song.length)
+
+          
+        }
+
         var TIME_TO_HITZONE = 1000
         var TIME_TO_DISAPPEAR = 2000
-        var soundFilePath = 'song'
-
-        var song = [
-          { lane: 1, time: 1800 },
-          { lane: 2, time: 2700 },
-          { lane: 3, time: 3600 },
-          { lane: 4, time: 4500 },
-          { lane: 4, time: 5000 },
-          { lane: 1, time: 5500 },
-          { lane: 2, time: 6400 },
-          { lane: 3, time: 7300 },
-          { lane: 4, time: 8200 },
-          { lane: 4, time: 8700 },
-          { lane: 1, time: 9100 },
-          { lane: 1, time: 10000 },
-          { lane: 2, time: 10400 },
-          { lane: 3, time: 10700 },
-          { lane: 1, time: 11000 },
-          { lane: 4, time: 11900 },
-          { lane: 3, time: 12200 },
-          { lane: 1, time: 12800 },
-          { lane: 1, time: 13700 },
-          { lane: 2, time: 14100 },
-          { lane: 3, time: 14400 },
-          { lane: 1, time: 14700 },
-          { lane: 4, time: 15500 },
-          { lane: 3, time: 15900 },
-          { lane: 1, time: 16500 },
-          { lane: 2, time: 17400 },
-          { lane: 3, time: 18300 },
-          { lane: 4, time: 19200 },
-          { lane: 4, time: 19700 },
-          { lane: 1, time: 20100 },
-          { lane: 2, time: 21000 },
-          { lane: 3, time: 21900 },
-          { lane: 4, time: 22900 },
-          { lane: 4, time: 23400 }
-        ]
-
+        var SONG_TIME = 25000
+        var SOUND_FILE_PATH = 'song'
         var KEYS = {
           65: 1, // A
           83: 2, // S
           68: 3, // D
           70: 4  // F
         }
+
+        var song = [
+          { lane: 1, time: 1800 },
+          { lane: 2, time: 2700 },
+          { lane: 3, time: 3600 },
+          { lane: 4, time: 4500 },
+          { lane: 1, time: 5500 },
+          { lane: 2, time: 6400 },
+          { lane: 3, time: 7300 },
+          { lane: 4, time: 8200 },
+          { lane: 1, time: 9100 },
+          { lane: 3, time: 10000 },
+          { lane: 2, time: 11000 },
+          { lane: 4, time: 11900 },
+          { lane: 1, time: 12800 },
+          { lane: 3, time: 13700 },
+          { lane: 2, time: 14700 },
+          { lane: 4, time: 15500 },
+          { lane: 1, time: 16500 },
+          { lane: 2, time: 17400 },
+          { lane: 3, time: 18300 },
+          { lane: 4, time: 19200 },
+          { lane: 1, time: 20100 },
+          { lane: 2, time: 21000 },
+          { lane: 3, time: 21900 },
+          { lane: 4, time: 22900 }
+        ]
+        var score = 0
         var clock = document.querySelector('.clock')
         var audio = document.querySelector('.audio')
         var sound = document.querySelector('.sound')
         var hitzone = document.querySelector('.hitzone')
 
-        loadSound(sound, soundFilePath)
+        loadSound(sound, SOUND_FILE_PATH)
 
         var audio = document.querySelector('.audio')
         audio.addEventListener('canplaythrough', function () {
@@ -304,12 +302,10 @@
           document.addEventListener('keydown', detectHit.bind(this, getTime))
           audio.play()
           setInterval(dropNotes.bind(this, getTime), 100)
-          // TODO: animate falling tokens
           setInterval(showTiming.bind(this, clock, getTime), 500)
+
+          setTimeout(endGame, SONG_TIME)
         })
-      },
-      end: function end() {
-        // TODO: handle cleanup; call after game over
       }
     }
 
