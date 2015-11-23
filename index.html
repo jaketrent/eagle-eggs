@@ -162,7 +162,8 @@
         bottom: 32px;
         left: 71px;
         height: 70px;
-        width: 300px;
+        width: 316px;
+        overflow: hidden;
         background-color: rgba(255, 255, 255, .7);
         border-radius: 5px;
         border: 3px solid #F05A28;
@@ -177,7 +178,9 @@
         border-color: #DC1F26;
       }
       .psh__hitkeys {
-        margin: 17px 0 0 22px;
+        position: absolute;
+        top: 17px;
+        left: 22px;
       }
       .psh__hitkey {
         height: 33px;
@@ -210,6 +213,41 @@
         border-color: #0C9DBF;
         color: #0C9DBF;
       }
+      .psh__score {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 70px;
+        width: 100px;
+        text-align: center;
+        background-color: #fff;
+      }
+      .psh__score__label {
+        background-color: #F05A28;
+        color: #fff;
+        padding: 5px 0;
+        font-family: sans-serif;
+        font-weight: lighter;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+      .psh__score__nums {
+        padding-top: 4px;
+        font-size: 0;
+      }
+      .psh__score__num {
+        display: inline-block;
+        font-size: 30px;
+        font-family: sans-serif;
+        font-weight: lighter;
+      }
+      .psh__score__actual {
+        color: #222222;
+      }
+      .psh__score__out-of {
+        color: #ababab;
+      }
+
     </style>
   </head>
   <body>
@@ -261,6 +299,13 @@
             <div class="psh__hitkey psh__hitkey--s">S</div>
             <div class="psh__hitkey psh__hitkey--d">D</div>
             <div class="psh__hitkey psh__hitkey--f">F</div>
+          </div>
+          <div class="psh__score">
+            <div class="psh__score__label">Your Score</div>
+            <div class="psh__score__nums">
+              <div class="psh__score__num psh__score__actual">0</div>
+              <div class="psh__score__num psh__score__out-of">/??</div>
+            </div>
           </div>
         </div>
       </div>
@@ -348,15 +393,18 @@
           }).length > 0
         }
 
+        function setScore(actual, outOf) {
+          console.log("actual", actual)
+          document.querySelector('.psh__score__actual').innerHTML = actual
+          document.querySelector('.psh__score__out-of').innerHTML = '/' + outOf
+        }
+
         function detectHit(getTime, evt) {
           var key = evt.which
           if (isActionKey(KEYS, key)) {
             var hit = isHit(song, getLane(KEYS, key), getTime())
-            // TODO: keep score
-
             if (hit) {
-              score++
-              console.log("hit", hitzone)
+              setScore(score++, song.length)
               addClass(hitzone, 'psh__hitzone--hit')
               setTimeout(function () { removeClass(hitzone, 'psh__hitzone--hit') }, 400)
             } else {
@@ -445,6 +493,7 @@
           audio.play()
           setInterval(dropNotes.bind(this, getTime), 100)
           setInterval(showTiming.bind(this, clock, getTime), 500)
+          setScore(score, song.length)
 
           setTimeout(endGame, SONG_TIME)
         })
