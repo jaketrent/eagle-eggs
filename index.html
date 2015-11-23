@@ -1,10 +1,17 @@
 <html>
   <head>
     <style>
+      // TODO: rm clock
+      .psh__clock {
+        height: 40px;
+        width: 50px;
+        border: 1px solid #ababab;
+      }
+
       * {
         box-sizing: border-box;
       }
-      @keyframes falling {
+      @keyframes psh__falling {
         0% {
           transform: translateY(-100px);
         }
@@ -12,109 +19,20 @@
           transform: translateY(700px);
         }
       }
-      /*.delay0 { animation-delay: 0ms; }
-      .delay500 { animation-delay: 500ms; }
-      .delay1000 { animation-delay: 1000ms; }
-      .delay1500 { animation-delay: 1500ms; }
-      .delay2000 { animation-delay: 2000ms; }
-      .delay2500 { animation-delay: 2500ms; }
-      .delay3000 { animation-delay: 3000ms; }
-      .delay3500 { animation-delay: 3000ms; }
-      .delay4000 { animation-delay: 4000ms; }
-      .delay4500 { animation-delay: 4500ms; }
-      .delay5000 { animation-delay: 5000ms; }*/
-
-      .falling {
-        animation-name: falling;
+      .psh__falling {
+        animation-name: psh__falling;
         animation-duration: 2s;
         animation-timing-function: linear;
         animation-delay: 0ms;
         animation-iteration-count: 1;
         animation-fill-mode: forwards;
       }
-      .lanes {
-        position: relative;
-        margin: 0 auto;
-        width: 804px;
-        font-size: 0;
-        border: 2px solid #525252;
-      }
-      .lane {
-        margin: 0;
-        display: inline-block;
-        vertical-align: top;
-        width: 200px;
-        height: 600px;
-        padding: 50px;
-        overflow: hidden;
-      }
-      .token {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        box-shadow: 1px 1px 4px rgba(0, 0, 0, .6);
-      }
-      .lane1 {
-        background: lightblue;
-      }
-      .lane1 .token {
-        background-color: blue;
-        transform: translateY(-200px);
-      }
-      .lane2 {
-        background: lightyellow;
-      }
-      .lane2 .token {
-        background-color: yellow;
-        transform: translateY(-200px);
-      }
-      .lane3 {
-        background: lightgreen;
-      }
-      .lane3 .token {
-        background-color: green;
-        transform: translateY(-200px);
-      }
-      .lane4 {
-        background: lightred;
-      }
-      .lane4 .token {
-        background-color: red;
-        transform: translateY(-200px);
-      }
-      .hitzone {
-        position: absolute;
-        left: -20px;
-        bottom: 50px;
-        width: 840px;
-        height: 100px;
-        background: rgba(0, 0, 0, .1);
-        outline: 4px solid #ababab;
-        transition: all 100ms;
-      }
-      .hitzone.hit {
-        background: rgba(66, 255, 0, 0.3);
-        outline: 4px solid green;
-      }
-      .hitzone.miss {
-        background: rgba(255, 0, 0, .3);
-        outline: 4px solid red;
-      }
-
-      .clock {
-        height: 40px;
-        width: 50px;
-        border: 1px solid #ababab;
-      }
-
-
       .psh__frame {
         position: fixed;
         bottom: 0;
         right: 300px;
         z-index: 510;
       }
-
       .psh__guitar {
 
       }
@@ -165,6 +83,7 @@
       .psh__frets {
         position: absolute;
         width: 100%;
+        padding-top: 15px;
       }
       .psh__fret {
         width: 100%;
@@ -191,13 +110,100 @@
       .psh__string:last-child {
         margin-right: 0;
       }
+      .psh__lanes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 475px;
+        font-size: 0;
+      }
+      .psh__lane {
+        display: inline-block;
+        height: 475px;
+        width: 50px;
+        padding: 0 8px 0 9px;
+        vertical-align: top;
+        overflow: hidden;
+      }
+      ,psh__token {
+        height: 33px;
+        width: 33px;
+        border-radius: 50%;
+        z-index: 540;
+      }
+      .psh__lane--1 .psh__token {
+        background-color: #23B45D;
+      }
+      .psh__lane--2 .psh__token {
+        background-color: #DC1F26;
+      }
+      .psh__lane--3 .psh__token {
+        background-color: #F96816;
+      }
+      .psh__lane--4 .psh__token {
+        background-color: #0C9DBF;
+      }
+      .psh__hitzone {
+        position: absolute;
+        bottom: 32px;
+        left: 71px;
+        height: 70px;
+        width: 300px;
+        background-color: rgba(255, 255, 255, .7);
+        border-radius: 5px;
+        border: 2px solid #F05A28;
+        z-index: 530;
+      }
+      .psh__hitzone--hit {
+        background: rgba(190, 254, 197, 0.7)
+        border-color: #23B45D;
+      }
+      .psh__hitzone--miss {
+        background-color: rgba(241, 196, 196, 0.7)
+        border-color: #DC1F26;
+      }
+      .psh__hitkeys {
+        margin: 17px 0 0 22px;
+      }
+      .psh__hitkey {
+        height: 33px;
+        width: 33px;
+        margin-right: 11px;
+        border-width: 3px;
+        border-style: solid;
+        text-align: center;
+        line-height: 28px;
+        border-radius: 50%;
+        font-family: sans-serif;
+        font-size: 12px;
+        font-weight: bolder;
+        display: inline-block;
+        background-color: #D8D8D8;
+      }
+      .psh__hitkey--a {
+        border-color: #23B45D;
+        color: #23B45D;
+      }
+      .psh__hitkey--s {
+        border-color: #DC1F26;
+        color: #DC1F26;
+      }
+      .psh__hitkey--d {
+        border-color: #F96816;
+        color: #F96816;
+      }
+      .psh__hitkey--f {
+        border-color: #0C9DBF;
+        color: #0C9DBF;
+      }
     </style>
   </head>
   <body>
-    <div class="sound"></div>
-    <div class="clock"></div>
 
     <div class="psh__frame">
+      <div class="psh__clock"></div>
+      <div class="psh__sound"></div>
       <div class="psh__guitar">
         <div class="psh__head">
           <div class="psh__head-hand"></div>
@@ -221,22 +227,24 @@
             <div class="psh__string"></div>
             <div class="psh__string"></div>
           </div>
+          <div class="psh__lanes">
+            <div class="psh__lane psh__lane--1"></div>
+            <div class="psh__lane psh__lane--2"></div>
+            <div class="psh__lane psh__lane--3"></div>
+            <div class="psh__lane psh__lane--4"></div>
+          </div>
+        </div>
+        <div class="psh__hitzone">
+          <div class="psh__hitkeys">
+            <div class="psh__hitkey psh__hitkey--a">A</div>
+            <div class="psh__hitkey psh__hitkey--s">S</div>
+            <div class="psh__hitkey psh__hitkey--d">D</div>
+            <div class="psh__hitkey psh__hitkey--f">F</div>
+          </div>
         </div>
       </div>
     </div>
-
-
-
-    <div class="lanes">
-      <div class="lane lane1"></div>
-      <div class="lane lane2"></div>
-      <div class="lane lane3"></div>
-      <div class="lane lane4"></div>
-      <div class="hitzone"></div>
-    </div>
   </body>
-
-
 
   <script>
 
@@ -265,7 +273,7 @@
         }
 
         function loadSound(sound, filePath, done) {
-          sound.innerHTML = '<audio class="audio">' +
+          sound.innerHTML = '<audio class="psh__audio">' +
               '<source src="' + filePath + '.mp3" type="audio/mpeg" />' +
               '<source src="' + filePath + '.ogg" type="audio/ogg" />' +
             '</audio>'
@@ -328,10 +336,10 @@
 
             if (hit) {
               score++
-              addClass(hitzone, 'hit')
+              addClass(hitzone, 'psh__hitzone--hit')
               setTimeout(function () { removeClass(hitzone, 'hit') }, 400)
             } else {
-              addClass(hitzone, 'miss')
+              addClass(hitzone, 'psh__hitzone--miss')
               setTimeout(function () { removeClass(hitzone, 'miss') }, 400)
             }
           }
@@ -343,9 +351,9 @@
 
         function dropNote(note) {
           var el = document.createElement('div')
-          el.className = 'token falling'
+          el.className = 'psh__token psh__falling'
 
-          var lane = document.querySelector('.lane' + note.lane)
+          var lane = document.querySelector('.psh__lane--' + note.lane)
           lane.appendChild(el)
           setTimeout(function () {
             lane.removeChild(el)
@@ -405,14 +413,13 @@
           { lane: 4, time: 22900 }
         ]
         var score = 0
-        var clock = document.querySelector('.clock')
-        var audio = document.querySelector('.audio')
-        var sound = document.querySelector('.sound')
-        var hitzone = document.querySelector('.hitzone')
+        var clock = document.querySelector('.psh__clock')
+        var sound = document.querySelector('.psh__sound')
+        var hitzone = document.querySelector('.psh__hitzone')
 
         loadSound(sound, SOUND_FILE_PATH)
 
-        var audio = document.querySelector('.audio')
+        var audio = document.querySelector('.psh__audio')
         audio.addEventListener('canplaythrough', function () {
           var getTime = createTimer()
           document.addEventListener('keydown', detectHit.bind(this, getTime))
@@ -425,7 +432,7 @@
       }
     }
 
-    // psHero.start()
+    psHero.start()
 
   </script>
 </html>
