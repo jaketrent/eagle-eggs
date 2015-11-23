@@ -90,6 +90,15 @@
         height: 100px;
         background: rgba(0, 0, 0, .1);
         outline: 4px solid #ababab;
+        transition: all 100ms;
+      }
+      .hitzone.hit {
+        background: rgba(66, 255, 0, 0.3);
+        outline: 4px solid green;
+      }
+      .hitzone.miss {
+        background: rgba(255, 0, 0, .3);
+        outline: 4px solid red;
       }
 
       .clock {
@@ -117,6 +126,28 @@
 
     window.psHero = {
       start: function start() {
+        function hasClass(el, className) {
+          if (el.classList)
+            return el.classList.contains(className)
+          else
+            return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))
+        }
+
+        function addClass(el, className) {
+          if (el.classList)
+            el.classList.add(className)
+          else if (!hasClass(el, className)) el.className += " " + className
+        }
+
+        function removeClass(el, className) {
+          if (el.classList)
+            el.classList.remove(className)
+          else if (hasClass(el, className)) {
+            var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
+            el.className=el.className.replace(reg, ' ')
+          }
+        }
+
         function loadSound(sound, filePath, done) {
           sound.innerHTML = '<audio class="audio">' +
               '<source src="' + filePath + '.mp3" type="audio/mpeg" />' +
@@ -178,6 +209,14 @@
             var hit = isHit(song, getLane(KEYS, key), getTime())
             console.log("hit", hit)
             // TODO: keep score
+
+            if (hit) {
+              addClass(hitzone, 'hit')
+              setTimeout(function () { removeClass(hitzone, 'hit') }, 400)
+            } else {
+              addClass(hitzone, 'miss')
+              setTimeout(function () { removeClass(hitzone, 'miss') }, 400)
+            }
           }
         }
 
@@ -255,6 +294,7 @@
         var clock = document.querySelector('.clock')
         var audio = document.querySelector('.audio')
         var sound = document.querySelector('.sound')
+        var hitzone = document.querySelector('.hitzone')
 
         loadSound(sound, soundFilePath)
 
