@@ -11,6 +11,8 @@
       }
       .scissors {
         position: relative;
+        top: 0;
+        left: 100px;
         display: inline-block;
       }
       .arm {
@@ -18,8 +20,8 @@
         top: 0;
         left: 0;
         height: 10px;
-        width: 50px;
-        transform-origin: 0 5px;
+        width: 95px;
+        transform-origin: 35px 5px;
       }
       .arm.top {
         transform: rotate(-20deg);
@@ -30,10 +32,9 @@
       .blade {
         position: absolute;
         top: 0;
-        left: 0;
+        left: 30px;
         height: 10px;
         width: 50px;
-        border-radius: 25% 0 0 25%;
       }
       .arm.top .blade {
         background-color: lightgreen;
@@ -44,7 +45,7 @@
       .point {
         position: absolute;
         top: 0;
-        right: -15px;
+        left: 80px;
         height: 0;
         width: 0;
       }
@@ -56,6 +57,32 @@
         border-top: 10px solid green;
         border-right: 15px solid transparent;
       }
+      .handle {
+        height: 6px;
+        width: 16px;
+        border: 7px solid red;
+        border-radius: 3px;
+      }
+      .arm.top .handle {
+        border-color: lightgreen;
+        transform: skew(-10deg);
+      }
+      .arm.bottom .handle {
+        position: relative;
+        top: -10px;
+        border-color: green;
+        transform: skew(10deg);
+      }
+      .fulcrum {
+        position: absolute;
+        left: 35px;
+        top: 2px;
+        height: 6px;
+        width: 6px;
+        border-radius: 50%;
+        background-color: #85b873;
+      }
+      
     </style>
   </head>
   <body>
@@ -72,7 +99,7 @@
           <div class="blade"></div>
           <div class="point"></div>
         </div>
-
+        <div class="fulcrum"></div>
       </div>
 
     </div>
