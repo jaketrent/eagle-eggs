@@ -2,13 +2,6 @@
   <head>
     <link rel="stylesheet" href="https://cloud.typography.com/6966154/691568/css/fonts.css">
     <style>
-      // TODO: rm clock
-      .psh__clock {
-        height: 40px;
-        width: 50px;
-        border: 1px solid #ababab;
-      }
-
       * {
         box-sizing: border-box;
       }
@@ -382,10 +375,6 @@
           return roundTimeTo(time, 500)
         }
 
-        function showTiming(clock, getTime) {
-          clock.innerHTML = roundTime(getTime())
-        }
-
         function isActionKey(KEYS, key) {
           return Object.keys(KEYS)
             .map(function (k) { return +k })
@@ -497,7 +486,6 @@
           { lane: 4, time: 22900 }
         ]
         var score = 0
-        var clock = document.querySelector('.psh__clock')
         var sound = document.querySelector('.psh__sound')
         var hitzone = document.querySelector('.psh__hitzone')
         var modal = document.querySelector('.psh__modal')
@@ -510,7 +498,6 @@
           document.addEventListener('keydown', detectHit.bind(this, getTime))
           audio.play()
           setInterval(dropNotes.bind(this, getTime), 100)
-          setInterval(showTiming.bind(this, clock, getTime), 500)
           setScore(score, song.length)
 
           setTimeout(endGame, SONG_TIME)
