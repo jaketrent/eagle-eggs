@@ -1,11 +1,202 @@
 <html>
   <head>
     <style>
+      * {
+        box-sizing: border-box;
+      }
+      @keyframes falling {
+        0% {
+          transform: translateY(-100px);
+        }
+        100% {
+          transform: translateY(700px);
+        }
+      }
+      .delay0 { animation-delay: 0ms; }
+      .delay500 { animation-delay: 500ms; }
+      .delay1000 { animation-delay: 1000ms; }
+      .delay1500 { animation-delay: 1500ms; }
+      .delay2000 { animation-delay: 2000ms; }
+      .delay2500 { animation-delay: 2500ms; }
+      .delay3000 { animation-delay: 3000ms; }
+      .delay3500 { animation-delay: 3000ms; }
+      .delay4000 { animation-delay: 4000ms; }
+      .delay4500 { animation-delay: 4500ms; }
+      .delay5000 { animation-delay: 5000ms; }
 
+      .falling {
+        animation-name: falling;
+        animation-duration: 2s;
+        animation-timing-function: linear;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+      }
+      .lanes {
+        position: relative;
+        margin: 0 auto;
+        width: 804px;
+        font-size: 0;
+        border: 2px solid #525252;
+      }
+      .lane {
+        margin: 0;
+        display: inline-block;
+        vertical-align: top;
+        width: 200px;
+        height: 600px;
+        padding: 50px;
+        overflow: hidden;
+      }
+      .token {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, .6);
+      }
+      .lane1 {
+        background: lightblue;
+      }
+      .lane1 .token {
+        background-color: blue;
+        transform: translateY(-200px);
+      }
+      .lane2 {
+        background: lightyellow;
+      }
+      .lane2 .token {
+        background-color: yellow;
+        transform: translateY(-200px);
+      }
+      .lane3 {
+        background: lightgreen;
+      }
+      .lane3 .token {
+        background-color: green;
+        transform: translateY(-200px);
+      }
+      .lane4 {
+        background: lightred;
+      }
+      .lane4 .token {
+        background-color: red;
+        transform: translateY(-200px);
+      }
+      .hitzone {
+        position: absolute;
+        left: -20px;
+        bottom: 50px;
+        width: 840px;
+        height: 100px;
+        background: rgba(0, 0, 0, .1);
+        outline: 4px solid #ababab;
+      }
+
+      .clock {
+        height: 40px;
+        width: 50px;
+        border: 1px solid #ababab;
+      }
     </style>
   </head>
   <body>
-    <div id="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente omnis obcaecati nostrum alias, reprehenderit quam fugiat sit cum ullam mollitia incidunt quod sint dicta voluptatem numquam, at cumque ut et!</div>
+    <div class="clock"></div>
+    <div class="lanes">
+      <div class="lane lane1">
+        <div class="token falling delay2000"></div>
+      </div>
+      <div class="lane lane2">
+        <div class="token falling delay50"></div>
+      </div>
+      <div class="lane lane3">
+        <div class="token falling delay1000"></div>
+      </div>
+      <div class="lane lane4">
+        <div class="token falling delay1500"></div>
+      </div>
+      <div class="hitzone"></div>
+    </div>
   </body>
 
+
+
+  <script>
+
+    window.psHero = {
+      start: function start() {
+        function createTimer() {
+          var startTime = Date.now()
+          return function timer() {
+            return Date.now() - startTime
+          }
+        }
+
+        function roundTime(time) {
+          return Math.round(time / 500.0) * 500
+        }
+
+        function showTiming(clock, getTime) {
+          clock.innerHTML = roundTime(getTime())
+        }
+
+        function isActionKey(KEYS, key) {
+          return Object.keys(KEYS)
+            .map(function (k) { return +k })
+            .indexOf(key) > -1
+        }
+
+        function getLane(KEYS, key) {
+          return KEYS[key]
+        }
+
+        function isInLane(targetLane, key) {
+          return targetLane === getLane(key)
+        }
+
+        function isInTime(targetTime, time) {
+          var allowance = 500
+          return time < targetTime + allowance
+              && time > targetTime - allowance
+        }
+
+        function isHit(song, lane, time) {
+          return song.filter(function (note) {
+            return isInLane(lane, note.lane) && isInTime(time, note.time)
+          }).length > 0
+        }
+
+        var song = [
+          { lane: 1, time: 4000 },
+          { lane: 2, time: 7000 },
+          { lane: 1, time: 8000 },
+          { lane: 3, time: 8500 },
+        ]
+
+        var KEYS = {
+          65: 1, // A
+          83: 2, // S
+          68: 3, // D
+          70: 4  // F
+        }
+
+        var getTime = createTimer()
+
+        var clock = document.querySelector('.clock')
+        document.addEventListener('keydown', function detectHit(evt) {
+          var key = evt.which
+          if (isActionKey(KEYS, key)) {
+            var hit = isHit(song, getLane(KEYS, key), getTime())
+            console.log("hit", hit)
+          }
+        })
+
+        setInterval(showTiming.bind(this, clock, getTime), 500)
+      },
+      end: function end() {
+        // TODO: handle cleanup; call after game over
+      }
+    }
+
+    psHero.start()
+
+  </script>
 </html>
