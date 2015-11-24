@@ -1,6 +1,5 @@
 <html>
   <head>
-    <link rel="stylesheet" href="https://cloud.typography.com/6966154/691568/css/fonts.css">
     <style>
       * {
         box-sizing: border-box;
@@ -194,21 +193,37 @@
         display: inline-block;
         background-color: #D8D8D8;
       }
-      .psh__hitkey--a {
+      .psh__hitkey--1 {
         border-color: #23B45D;
         color: #23B45D;
       }
-      .psh__hitkey--s {
+      .psh__hitkey--2 {
         border-color: #DC1F26;
         color: #DC1F26;
       }
-      .psh__hitkey--d {
+      .psh__hitkey--3 {
         border-color: #F96816;
         color: #F96816;
       }
-      .psh__hitkey--f {
+      .psh__hitkey--4 {
         border-color: #0C9DBF;
         color: #0C9DBF;
+      }
+      .psh__hitkey--highlight {
+        border-color: #d8d8d8;
+        color: #d8d8d8;
+      }
+      .psh__hitkey--highlight--1 {
+        background-color: #23be4d;
+      }
+      .psh__hitkey--highlight--2 {
+        background-color: #DC1F26;
+      }
+      .psh__hitkey--highlight--3 {
+        background-color: #F96816;
+      }
+      .psh__hitkey--highlight--4 {
+        background-color: #0C9DBF;
       }
       .psh__score {
         position: absolute;
@@ -307,10 +322,10 @@
         </div>
         <div class="psh__hitzone">
           <div class="psh__hitkeys">
-            <div class="psh__hitkey psh__hitkey--a">A</div>
-            <div class="psh__hitkey psh__hitkey--s">S</div>
-            <div class="psh__hitkey psh__hitkey--d">D</div>
-            <div class="psh__hitkey psh__hitkey--f">F</div>
+            <div class="psh__hitkey psh__hitkey--1">A</div>
+            <div class="psh__hitkey psh__hitkey--2">S</div>
+            <div class="psh__hitkey psh__hitkey--3">D</div>
+            <div class="psh__hitkey psh__hitkey--4">F</div>
           </div>
           <div class="psh__score">
             <div class="psh__score__label">Your Score</div>
@@ -462,16 +477,28 @@
           document.querySelector('.psh__score__out-of').innerHTML = '/' + outOf
         }
 
+        function highlightLane(lane) {
+          var btn = document.querySelector('.psh__hitkey--' + lane)
+          addClass(btn, 'psh__hitkey--highlight')
+          addClass(btn, 'psh__hitkey--highlight--' + lane)
+          setTimeout(function () {
+            removeClass(btn, 'psh__hitkey--highlight')
+            removeClass(btn, 'psh__hitkey--highlight--' + lane)
+          }, TIME_TO_KEY_FEEDBACK)
+        }
+
         function detectHit(getTime, evt) {
           var key = evt.which
           if (isActionKey(KEYS, key)) {
+            highlightLane(getLane(KEYS, key))
+
             if (isHit(song, getLane(KEYS, key), getTime())) {
               setScore(score++, song.length)
               addClass(hitzone, 'psh__hitzone--hit')
-              setTimeout(function () { removeClass(hitzone, 'psh__hitzone--hit') }, 400)
+              setTimeout(function () { removeClass(hitzone, 'psh__hitzone--hit') }, TIME_TO_HIT_FEEDBACK)
             } else {
               addClass(hitzone, 'psh__hitzone--miss')
-              setTimeout(function () { removeClass(hitzone, 'psh__hitzone--miss') }, 400)
+              setTimeout(function () { removeClass(hitzone, 'psh__hitzone--miss') }, TIME_TO_HIT_FEEDBACK)
             }
           }
         }
@@ -486,9 +513,7 @@
 
           var lane = document.querySelector('.psh__lane--' + note.lane)
           lane.appendChild(el)
-          setTimeout(function () {
-            lane.removeChild(el)
-          }, TIME_TO_DISAPPEAR)
+          setTimeout(function () { lane.removeChild(el) }, TIME_TO_DISAPPEAR)
         }
 
         function dropNotes(getTime, evt) {
@@ -505,6 +530,8 @@
         }
 
         var HIT_ALLOWANCE = 300
+        var TIME_TO_KEY_FEEDBACK = 300
+        var TIME_TO_HIT_FEEDBACK = 400
         var TIME_TO_HITZONE = 1000
         var TIME_TO_DISAPPEAR = 1500
         var SONG_TIME = 25000
